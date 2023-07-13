@@ -2,7 +2,7 @@ package main.reproject.advice;
 
 
 import lombok.extern.slf4j.Slf4j;
-import main.reproject.response.ErrorResponse;
+import main.reproject.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

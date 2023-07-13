@@ -1,5 +1,4 @@
-package main.reproject.response;
-
+package main.reproject.dto;
 
 import lombok.Getter;
 import main.reproject.advice.ExceptionCode;
