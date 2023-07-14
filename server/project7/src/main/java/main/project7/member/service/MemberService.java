@@ -11,17 +11,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final CustomBeanUtils customBeanUtils;
 
 
-    public MemberService(MemberRepository memberRepository, CustomBeanUtils customBeanUtils) {
+
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.customBeanUtils = customBeanUtils;
     }
 
     public Member createMember(Member member) {
@@ -32,12 +33,17 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+    public Member updateMember (Member member) {
+        Member findMember = findVerifiedMember(member.getMemberId());
 
-    public Member updateMember(Member member) {
-        Member findMember = findMember(member.getMemberId());
-        Member updateMember = findMember.changeMemberInfo(member, customBeanUtils);
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getPassword())
+                .ifPresent(password -> findMember.setPassword(password));
+        Optional.ofNullable(member.getPhone())
+                .ifPresent(phone -> findMember.setPhone(phone));
 
-        return memberRepository.save(updateMember);
+        return memberRepository.save(findMember);
     }
 
     @Transactional(readOnly = true)
@@ -57,4 +63,15 @@ public class MemberService {
         Member findMember = findMember(memberId);
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_WITHDRAW);
     }
+
+
+    //db에 저장되어 있는 맴버가 있는지 없는지 판별하는 기능
+    private Member findVerifiedMember(long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        if(optionalMember.isEmpty()){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+        return optionalMember.get();
+    }
+
 }

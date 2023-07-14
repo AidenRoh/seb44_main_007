@@ -2,8 +2,10 @@ package main.project7.member.mapper;
 
 import main.project7.member.dto.MemberDto;
 import main.project7.member.entity.Member;
-import java.util.List;
+import org.mapstruct.Mapper;
 
+import java.util.List;
+@Mapper(componentModel = "spring")
 public interface MemberMapper {
     Member memberPostDtoToMember(MemberDto.Post requestBody);
 
