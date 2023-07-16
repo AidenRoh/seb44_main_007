@@ -29,16 +29,8 @@ public class Fixed {
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private Category category;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId", nullable = false)
-    private Member member;
-
-//    public void setMember(Member member) {
-//        this.member = member;
-//        member.getFixedList().add(this);
-//    }
+    @Column
+    private Long memberId;
 
     public void setDate(LocalDate date) {
         this.date = date;

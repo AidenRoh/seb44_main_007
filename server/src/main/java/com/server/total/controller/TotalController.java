@@ -6,6 +6,8 @@ import com.server.total.mapper.TotalMapper;
 import com.server.total.service.TotalService;
 import com.server.total.dto.TotalDto;
 import com.server.utils.UriCreator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,16 +20,14 @@ import java.net.URI;
 @RestController
 @RequestMapping("totals")
 @Validated
+@Slf4j
+@RequiredArgsConstructor
 public class TotalController {
 
     private final static String TOTALS_URL = "totals";
     private final TotalService totalService;
     private final TotalMapper mapper;
 
-    public TotalController(TotalService totalService, TotalMapper mapper) {
-        this.totalService = totalService;
-        this.mapper = mapper;
-    }
 
     @PostMapping
     public ResponseEntity postTotal(@Valid @RequestBody TotalDto.Post requestBody) {
@@ -36,11 +36,18 @@ public class TotalController {
         return new ResponseEntity<>(TotalDto.Response.response(total), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{memberId}")
-    public ResponseEntity putTrade(@PathVariable("memberId") @Positive long memberId,
-                                   @Valid @RequestBody TotalDto.Put requestBody) {
-        Total total = totalService.updateTotal(mapper.totalPutDtoToTotal(requestBody.addTotalId(memberId)));
+    @PatchMapping("/{totalId}")
+    public ResponseEntity putTrade(@PathVariable("totalId") @Positive long totalId,
+                                   @Valid @RequestBody TotalDto.Patch requestBody) {
+        Total total = totalService.updateTotal(mapper.totalPatchDtoToTotal(requestBody.addTotalId(totalId)));
         return new ResponseEntity(new ResponseDto.SingleResponseDto<>(mapper.totalToResponseDto(total)),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/{totalId}")
+    public ResponseEntity getTotal(@PathVariable("totalId") @Positive long totalId){
+        Total total = totalService.findTotal(totalId);
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(mapper.totalToResponseDto(total)),
                 HttpStatus.OK);
     }
 

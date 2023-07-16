@@ -31,9 +31,12 @@ public class FixedController {
     }
 
 
-    @PostMapping
-    public ResponseEntity postFixed(@Valid @RequestBody FixedDto.Post requestBody) {
-        Fixed fixed = fixedService.createFixed(mapper.fixedPostDtoToFixed(requestBody));
+    @PostMapping("/memberId")
+    public ResponseEntity postFixed(@PathVariable("memberId") @Positive Long memberId,
+                                    @Valid @RequestBody FixedDto.Post requestBody) {
+        requestBody.setMemberId(memberId);
+        Fixed fixed = mapper.fixedPostDtoToFixed(requestBody);
+        Fixed createFixed = fixedService.createFixed(fixed);
         URI location = UriCreator.createUri(FIXED_URL, fixed.getFixedId());
         return new ResponseEntity<>(FixedDto.Response.response(fixed), HttpStatus.CREATED);
     }

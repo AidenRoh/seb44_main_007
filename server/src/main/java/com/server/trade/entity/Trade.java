@@ -21,14 +21,21 @@ public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long tradeId;
+    @Column
     private String type; //수입 or 지출
+    @Column
     private String tradeName; //내역
     @NotNull
+    @Column
     private BigDecimal amount; //금액정확도를 위해 BigDecimal 타입을 사용했습니다.
+    @Column
     private String note; //비고
+    @Column
     private LocalDate date; //날짜 LocalDate.of(2023, 7, 1);
     @Enumerated(EnumType.STRING)
+    @Column
     private Category category;
+    @Column
     private Long memberId;
 
 

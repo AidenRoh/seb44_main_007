@@ -17,13 +17,6 @@ public class MemberDto {
 
     @Getter
     @AllArgsConstructor
-    public class Login {
-        private String email;
-        private String password;
-    }
-
-    @Getter
-    @AllArgsConstructor
     public static class Post{
         @NotBlank
         @Email
@@ -42,7 +35,7 @@ public class MemberDto {
     @AllArgsConstructor
     public static class Patch {
 
-        private long memberId;
+        private Long memberId;
 
         private String name;
 
@@ -61,7 +54,7 @@ public class MemberDto {
     @AllArgsConstructor
     public static class PatchPassword {
 
-        private long memberId;
+        private Long memberId;
 
         @NotBlank
         private String currentPassword;

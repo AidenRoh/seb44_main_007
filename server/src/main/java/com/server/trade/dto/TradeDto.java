@@ -20,7 +20,7 @@ public class TradeDto {
     @NoArgsConstructor
     @Builder
     public static class Post {
-        private long memberId;
+        private Long memberId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -29,7 +29,7 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-        public void setMemberId(long memberId) {
+        public void setMemberId(Long memberId) {
             this.memberId = memberId;
         }
 
@@ -40,7 +40,7 @@ public class TradeDto {
     @NoArgsConstructor
     @Builder
     public static class Patch {
-        private long tradeId;
+        private Long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull

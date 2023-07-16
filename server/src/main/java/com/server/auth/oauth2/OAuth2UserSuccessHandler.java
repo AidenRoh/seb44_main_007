@@ -6,7 +6,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.utils.CustomAuthorityUtils;
 import com.server.auth.jwt.JwtTokenizer;
 import com.server.member.entity.Member;
 import com.server.member.service.MemberService;

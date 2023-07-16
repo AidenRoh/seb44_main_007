@@ -1,6 +1,6 @@
 package com.server.auth.filter;
 
-import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.utils.CustomAuthorityUtils;
 import com.server.auth.jwt.JwtTokenizer;
 import com.server.auth.redis.RedisService;
 import com.server.member.entity.Member;
@@ -43,12 +43,16 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
         } catch (SignatureException se) {
+            logger.error("Signature Exception: {}");
             request.setAttribute("exception", se);
         } catch (ExpiredJwtException ee) {
+            logger.error("Expired JWT Exception: {}");
             request.setAttribute("exception", ee);
         } catch (Exception e) {
+            logger.error("Exception: {}");
             request.setAttribute("exception", e);
         }
+
 
         filterChain.doFilter(request, response);
     }

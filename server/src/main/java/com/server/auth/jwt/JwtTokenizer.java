@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-public class JwtTokenizer { //문제없음
+public class JwtTokenizer {
 
     @Getter
     @Value("${jwt.key}")
@@ -102,4 +102,11 @@ public class JwtTokenizer { //문제없음
                 .parseClaimsJws(jws);   // JWT를 파싱해서 Claims를 얻는다.
     }
 
+    public Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getKeyFromBase64EncodedKey(secretKey))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

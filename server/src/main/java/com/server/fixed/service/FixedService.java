@@ -25,8 +25,7 @@ public class FixedService {
     }
 
     public Fixed createFixed(Fixed fixed) {
-        Fixed saveFixed = fixedRepository.save(fixed);
-        return saveFixed;
+        return fixedRepository.save(fixed);
     }
 
 

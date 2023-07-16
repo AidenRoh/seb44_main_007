@@ -56,4 +56,15 @@ logging:
       root: DEBUG
       com.server: DEBUG
       server:
-        auth: debug
+        auth: DEBUG
+
+#logging:
+#  file:
+#    name: logs/logging.log
+#  level:
+#    root: DEBUG
+#    spring:
+#      root: DEBUG
+#      com:
+#        server:
+#          auth: DEBUG

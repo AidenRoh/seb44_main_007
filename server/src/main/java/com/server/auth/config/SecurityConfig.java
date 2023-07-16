@@ -1,18 +1,20 @@
 package com.server.auth.config;
 
 
-import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.utils.CustomAuthorityUtils;
 import com.server.auth.Handler.*;
 import com.server.auth.filter.JwtAuthenticationFilter;
 
 import com.server.auth.filter.JwtVerificationFilter;
 import com.server.auth.jwt.JwtTokenizer;
+import com.server.auth.utils.JwtUtils;
 import com.server.member.repository.MemberRepository;
 import com.server.auth.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +26,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -32,6 +35,7 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer{
+    private final JwtUtils jwtUtils;
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils; // 추가
     private final RedisService redisService;
@@ -63,20 +67,19 @@ public class SecurityConfig implements WebMvcConfigurer{
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-//                .authorizeHttpRequests(authorize -> authorize
-////                        .antMatchers(HttpMethod.GET, "/member/**").permitAll()
-////                        .antMatchers(HttpMethod.POST, "/member/signup").permitAll()
-////                        .antMatchers(HttpMethod.PUT, "/member/edit/**").hasRole("USER")
-////                        .antMatchers(HttpMethod.DELETE, "/member/**").hasRole("USER")
-//                        .antMatchers(HttpMethod.GET, "/trade/**").hasRole("USER")
-//                        .anyRequest().permitAll()
-//                )
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST, "/members/**").permitAll()
+                        .antMatchers(HttpMethod.POST, "/login").permitAll()
+                        .antMatchers(HttpMethod.GET, "/members/**").permitAll()
+
+                        .antMatchers(HttpMethod.PATCH,"/members/**").authenticated()
+                        .antMatchers(HttpMethod.DELETE,"/members/**").authenticated()
+                        .antMatchers("/trades").authenticated()
                         .anyRequest().permitAll()
                 )
 
                 .logout()
-                .logoutUrl("/auth/logout")
+                .logoutUrl("/logout")
                 .addLogoutHandler(new UserLogoutHandler(redisService, jwtTokenizer))
                 .logoutSuccessUrl("/");
 //                .and()
@@ -106,16 +109,14 @@ public class SecurityConfig implements WebMvcConfigurer{
         }
     }
 
-//    @Override //내가 만든 인터셉터 등록
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(controllerInterceptor)
-//                .addPathPatterns("/trade/*")
-//                .excludePathPatterns("/member/*");
-//    }
+    @Override //인터셉터와 연결
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ControllerInterceptor(jwtUtils))
+                .addPathPatterns("/members/**", "/login", "/trades/**");
+    }
 
 
-
-    public void addCorsMapptings(CorsRegistry registry){
+    public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET","POST", "PATCH", "DELETE","OPTIONS")

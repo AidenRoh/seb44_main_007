@@ -3,20 +3,16 @@ package com.server.member.service;
 
 import com.server.advice.BusinessLogicException;
 import com.server.advice.ExceptionCode;
-import com.server.auth.CustomAuthorityUtils;
+import com.server.auth.utils.CustomAuthorityUtils;
 import com.server.member.entity.Member;
 import com.server.member.repository.MemberRepository;
-import com.server.utils.CustomBeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Transactional

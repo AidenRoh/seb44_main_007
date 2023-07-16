@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-14T13:27:30+0900",
+    date = "2023-07-15T12:52:33+0900",
     comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -29,6 +29,7 @@ public class FixedMapperImpl implements FixedMapper {
         fixed.setAmount( requestBody.getAmount() );
         fixed.setNote( requestBody.getNote() );
         fixed.setCategory( requestBody.getCategory() );
+        fixed.setMemberId( requestBody.getMemberId() );
 
         return fixed;
     }

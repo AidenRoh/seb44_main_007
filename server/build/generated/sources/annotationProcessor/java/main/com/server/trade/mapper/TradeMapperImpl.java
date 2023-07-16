@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-14T13:27:31+0900",
+    date = "2023-07-15T12:52:33+0900",
     comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -42,7 +42,9 @@ public class TradeMapperImpl implements TradeMapper {
 
         Trade.TradeBuilder trade = Trade.builder();
 
-        trade.tradeId( requestBody.getTradeId() );
+        if ( requestBody.getTradeId() != null ) {
+            trade.tradeId( requestBody.getTradeId() );
+        }
         trade.type( requestBody.getType() );
         trade.tradeName( requestBody.getTradeName() );
         trade.amount( requestBody.getAmount() );

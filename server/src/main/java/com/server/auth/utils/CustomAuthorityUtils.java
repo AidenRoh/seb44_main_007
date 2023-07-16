@@ -1,4 +1,4 @@
-package com.server.auth;
+package com.server.auth.utils;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -13,9 +13,9 @@ public class CustomAuthorityUtils {
 //        @Value("${mail.address.admin}")
     private String adminMailAddress = "admin@gmail.com";
 
-    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER", "ROLE_PREMIUM");
+    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
     private final List<GrantedAuthority> USER_ROLES = AuthorityUtils.createAuthorityList("ROLE_USER");
-    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER", "PREMIUM");
+    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
     private final List<String> USER_ROLES_STRING = List.of("USER");
 
 
