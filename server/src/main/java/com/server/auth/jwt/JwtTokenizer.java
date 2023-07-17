@@ -104,7 +104,7 @@ public class JwtTokenizer {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getKeyFromBase64EncodedKey(secretKey))
+                .setSigningKey(getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey)))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

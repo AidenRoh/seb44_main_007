@@ -5,8 +5,10 @@ import com.server.fixed.dto.FixedDto;
 import com.server.fixed.entity.Fixed;
 import com.server.fixed.mapper.FixedMapper;
 import com.server.fixed.service.FixedService;
+import com.server.trade.dto.TradeDto;
+import com.server.trade.entity.Trade;
 import com.server.utils.UriCreator;
-import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,9 +34,13 @@ public class FixedController {
     }
 
 
-    @PostMapping("/memberId")
+    @PostMapping("/{memberId}")
     public ResponseEntity postFixed(@PathVariable("memberId") @Positive Long memberId,
                                     @Valid @RequestBody FixedDto.Post requestBody) {
+        if (requestBody == null) {
+            throw new IllegalArgumentException("Request body cannot be null.");
+        }
+
         requestBody.setMemberId(memberId);
         Fixed fixed = mapper.fixedPostDtoToFixed(requestBody);
         Fixed createFixed = fixedService.createFixed(fixed);
@@ -41,31 +48,40 @@ public class FixedController {
         return new ResponseEntity<>(FixedDto.Response.response(fixed), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{fixedId}")
-    public ResponseEntity putFixed(@PathVariable("fixedId") @Positive long fixedId,
-                                   @Valid @RequestBody FixedDto.Put requestBody) {
-        Fixed fixed = fixedService.updateFixed(mapper.fixedPutDtoToFixed(requestBody.addFixed(fixedId)));
+    @PatchMapping("/{fixedId}/{memberId}")
+    public ResponseEntity patchFixed(@PathVariable("fixedId") @Positive Long fixedId,
+                                   @PathVariable("memberId") @Positive Long memberId,
+                                   @Valid @RequestBody FixedDto.Patch requestBody) {
+        Fixed fixed = fixedService.updateFixed(mapper.fixedPutDtoToFixed(requestBody.addFixedId(fixedId)), memberId);
         return new ResponseEntity(new ResponseDto.SingleResponseDto<>(mapper.fixedToResponseDto(fixed)),
                 HttpStatus.OK);
     }
 
     @GetMapping("/{fixedId}")
-    public ResponseEntity getFixed(@PathVariable("fixedId") @Positive long fixedId) {
+    public ResponseEntity getFixed(@PathVariable("fixedId") @Positive Long fixedId) {
         Fixed fixed = fixedService.findFixed(fixedId);
         return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(FixedDto.Response.response(fixed)), HttpStatus.OK);
     }
 
+
     @GetMapping
-    public ResponseEntity<?> getFixedAll(@Positive @RequestParam(defaultValue = "1") int page,
-                                         @Positive @RequestParam(defaultValue = "10") int size){
-        Page<Fixed> pageInfo = fixedService.findFixeds(page -1, size);
-        List<Fixed> fixedList = pageInfo.getContent();
-        List<FixedDto.ListElement> fixedInfoList = FixedDto.getList(fixedList);
-        return new ResponseEntity<>(new ResponseDto.MultiResponseDto<>(fixedInfoList, pageInfo), HttpStatus.OK);
+    public ResponseEntity<?> getFixeds(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        List<Fixed> fixeds = fixedService.findFixeds(startDate, endDate);
+
+        if (fixeds.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(fixeds, HttpStatus.OK);
+        }
+
     }
 
+
     @DeleteMapping("/{fixedId}")
-    public ResponseEntity deleteFixed(@PathVariable("fixedId") @Positive long fixedId) {
+    public ResponseEntity deleteFixed(@PathVariable("fixedId") @Positive Long fixedId) {
         fixedService.deleteFixed(fixedId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

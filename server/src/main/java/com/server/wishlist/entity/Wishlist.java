@@ -2,6 +2,7 @@ package com.server.wishlist.entity;
 
 
 import com.server.audit.Auditable;
+import com.server.wishlist.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class Wishlist extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long wishlistId;
+    private Long wishlistId;
 
     @Column(length = 100, nullable = false)
     private String wishlistName;
@@ -24,23 +25,12 @@ public class Wishlist extends Auditable {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(length = 100, nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Category category;
 
     @Column
-    private String goodsImageURL;
+    private Long memberId;
 
-    @OneToOne
-    @JoinColumn(name = "limitAccountId")
-    private LimitAccount limitAccount;
-
-    public Wishlist (long wishlistId) {this.wishlistId = wishlistId;}
-
-    public Wishlist(BigDecimal price, String wishlistName, String category, BigDecimal limitAccount, String goodsImageURL) {
-        this.price = price;
-        this.wishlistName = wishlistName;
-        this.category = category;
-        this.goodsImageURL = goodsImageURL;
-    }
 }
 

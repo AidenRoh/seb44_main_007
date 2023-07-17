@@ -2,7 +2,6 @@ package com.server.wishlist.mapper;
 
 import com.server.wishlist.dto.WishlistDto;
 import com.server.wishlist.entity.Wishlist;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-14T13:27:30+0900",
+    date = "2023-07-17T16:43:19+0900",
     comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -27,13 +26,13 @@ public class WishlistMapperImpl implements WishlistMapper {
         wishlist.setWishlistName( requestBody.getWishlistName() );
         wishlist.setPrice( requestBody.getPrice() );
         wishlist.setCategory( requestBody.getCategory() );
-        wishlist.setGoodsImageURL( requestBody.getGoodsImageURL() );
+        wishlist.setMemberId( requestBody.getMemberId() );
 
         return wishlist;
     }
 
     @Override
-    public Wishlist wishlistPutDtoToWishlist(WishlistDto.Put requestBody) {
+    public Wishlist wishlistPutDtoToWishlist(WishlistDto.Patch requestBody) {
         if ( requestBody == null ) {
             return null;
         }
@@ -41,9 +40,9 @@ public class WishlistMapperImpl implements WishlistMapper {
         Wishlist wishlist = new Wishlist();
 
         wishlist.setWishlistId( requestBody.getWishlistId() );
+        wishlist.setWishlistName( requestBody.getWishlistName() );
         wishlist.setPrice( requestBody.getPrice() );
         wishlist.setCategory( requestBody.getCategory() );
-        wishlist.setGoodsImageURL( requestBody.getGoodsImageURL() );
 
         return wishlist;
     }
@@ -54,21 +53,16 @@ public class WishlistMapperImpl implements WishlistMapper {
             return null;
         }
 
-        long wishlistId = 0L;
-        BigDecimal price = null;
-        String category = null;
-        String goodsImageURL = null;
+        WishlistDto.Response.ResponseBuilder response = WishlistDto.Response.builder();
 
-        wishlistId = wishlist.getWishlistId();
-        price = wishlist.getPrice();
-        category = wishlist.getCategory();
-        goodsImageURL = wishlist.getGoodsImageURL();
+        if ( wishlist.getWishlistId() != null ) {
+            response.wishlistId( wishlist.getWishlistId() );
+        }
+        response.wishlistName( wishlist.getWishlistName() );
+        response.price( wishlist.getPrice() );
+        response.category( wishlist.getCategory() );
 
-        String name = null;
-
-        WishlistDto.Response response = new WishlistDto.Response( wishlistId, name, price, category, goodsImageURL );
-
-        return response;
+        return response.build();
     }
 
     @Override

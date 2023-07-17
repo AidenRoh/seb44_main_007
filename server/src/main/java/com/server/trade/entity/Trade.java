@@ -35,6 +35,7 @@ public class Trade {
     @Enumerated(EnumType.STRING)
     @Column
     private Category category;
+
     @Column
     private Long memberId;
 

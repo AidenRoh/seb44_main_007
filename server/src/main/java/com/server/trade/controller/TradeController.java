@@ -1,28 +1,21 @@
 package com.server.trade.controller;
 
 import com.server.dto.ResponseDto;
-import com.server.member.entity.Member;
 import com.server.member.repository.MemberRepository;
 import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
 import com.server.trade.mapper.TradeMapper;
 import com.server.trade.service.TradeService;
 import com.server.utils.UriCreator;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,7 +25,6 @@ import java.util.List;
 public class TradeController {
     private final static String TRADES_URL = "trades";
     private TradeService tradeService;
-//    private CustomUserDetailsService userDetailsService;
     private MemberRepository memberRepository;
     private TradeMapper mapper;
 
@@ -71,14 +63,11 @@ public class TradeController {
 
     @PatchMapping("/{tradeId}/{memberId}")
     public ResponseEntity patchTrade(@PathVariable("tradeId") @Positive Long tradeId,
-                                     @PathVariable("tradeId") @Positive Long memberId,
-//                                     Principal principal,
+                                     @PathVariable("memberId") @Positive Long memberId,
                                      @Valid @RequestBody TradeDto.Patch requestBody) {
+
         Trade trade = tradeService.updateTrade(mapper.tradePatchDtoToTrade(requestBody.addTradeId(tradeId)), memberId);
 
-
-//        String memberId = principal.getName();
-//        Trade trade = tradeService.updateTrade(mapper.tradePatchDtoToTrade(requestBody.addTradeId(tradeId)), memberId);
         return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(
                 mapper.tradeToResponseDto(trade)), HttpStatus.OK);
     }
@@ -93,7 +82,7 @@ public class TradeController {
 
 
 
-    @GetMapping("/trades")
+    @GetMapping
     public ResponseEntity<List<Trade>> getTrades(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {

@@ -75,6 +75,7 @@ public class SecurityConfig implements WebMvcConfigurer{
                         .antMatchers(HttpMethod.PATCH,"/members/**").authenticated()
                         .antMatchers(HttpMethod.DELETE,"/members/**").authenticated()
                         .antMatchers("/trades").authenticated()
+                        .antMatchers("/fixeds").authenticated()
                         .anyRequest().permitAll()
                 )
 
@@ -112,7 +113,7 @@ public class SecurityConfig implements WebMvcConfigurer{
     @Override //인터셉터와 연결
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ControllerInterceptor(jwtUtils))
-                .addPathPatterns("/members/**", "/login", "/trades/**");
+                .addPathPatterns("/members/**", "/login", "/trades/**", "/fixed/**");
     }
 
 

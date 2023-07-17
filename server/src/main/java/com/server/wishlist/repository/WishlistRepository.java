@@ -7,13 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
 
+    List<Wishlist> findAllByOrderByCreatedAtDesc();
+    List<Wishlist> findByPriceLessThan(BigDecimal upperLimit);
 
-    Wishlist findByWishlistName(String wishlistName);
 
-    @Query(value = "SELECT w FROM Wishlist w JOIN w.limitAccount la WHERE w.price < la.limitAccount ORDER BY w.price DESC")
-    Page<Wishlist> findWishlistsByLA(Pageable pageable);
 }
 

@@ -95,10 +95,10 @@ public class TradeService {
     }
 
     // 해당 거래가 있는지 조회
-    private Trade findVerifiedTrade(long tradeId) {
+    private Trade findVerifiedTrade(Long tradeId) {
         Optional<Trade> optionalTrade = tradeRepository.findById(tradeId);
         if(optionalTrade.isEmpty()){
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.TRADE_NOT_FOUND);
         }
         return optionalTrade.get();
     }
