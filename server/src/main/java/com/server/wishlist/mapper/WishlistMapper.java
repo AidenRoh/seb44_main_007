@@ -12,7 +12,7 @@ public interface WishlistMapper {
 
     Wishlist wishlistPostDtoToWishlist(WishlistDto.Post requestBody);
 
-    Wishlist wishlistPutDtoToWishlist(WishlistDto.Put requestBody);
+    Wishlist wishlistPutDtoToWishlist(WishlistDto.Patch requestBody);
 
     WishlistDto.Response wishlistToWishlistResponseDto(Wishlist wishlist);
 

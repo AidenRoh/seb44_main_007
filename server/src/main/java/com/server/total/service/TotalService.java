@@ -1,7 +1,7 @@
 package com.server.total.service;
 
-import com.server.exception.BusinessLogicException;
-import com.server.exception.ExceptionCode;
+import com.server.advice.BusinessLogicException;
+import com.server.advice.ExceptionCode;
 import com.server.total.entity.Total;
 import com.server.total.repository.TotalRepository;
 import org.springframework.stereotype.Service;

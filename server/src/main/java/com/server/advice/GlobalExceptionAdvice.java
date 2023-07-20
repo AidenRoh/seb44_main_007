@@ -1,6 +1,5 @@
 package com.server.advice;
 
-import com.server.exception.BusinessLogicException;
 import com.server.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -50,7 +49,7 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
-    @ExceptionHandler //선생님 코드
+    @ExceptionHandler
     public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
         final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
         log.debug("# BusinessLogicException: {}-{}", e.getExceptionCode(), e.getMessage());
@@ -100,4 +99,14 @@ public class GlobalExceptionAdvice {
 
         return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(RuntimeException.class) //회원가입 오류시 사용
+    public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e) {
+        log.error("RuntimeException: {}", e);
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(e.getMessage());
+    }
+
+
 }

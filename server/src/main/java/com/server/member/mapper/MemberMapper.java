@@ -13,7 +13,7 @@ public interface MemberMapper {
 
     Member memberPostDtoToMember(MemberDto.Post requestBody);
 
-    Member memberPutDtoToMember(MemberDto.Put requestBody);
+    Member memberPatchDtoToMember(MemberDto.Patch requestBody);
 
     MemberDto.Response memberToMemberResponseDto(Member member);
 

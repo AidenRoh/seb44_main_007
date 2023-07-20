@@ -22,6 +22,7 @@ public class FixedDto {
     @NoArgsConstructor
     @Builder
     public static class Post {
+        private Long memberId;
         private String type; //수입 or 지출
         private String fixedName; //내역
         @NotNull
@@ -29,6 +30,10 @@ public class FixedDto {
         private String note; //비고
         private LocalDate date;
         private Category category;
+
+        public void setMemberId(Long memberId) {
+            this.memberId = memberId;
+        }
 
     }
 
@@ -36,8 +41,8 @@ public class FixedDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Put {
-        private long fixedId;
+    public static class Patch {
+        private Long fixedId;
         private String type; //수입 or 지출
         private String fixedName; //내역
         @NotNull
@@ -46,7 +51,7 @@ public class FixedDto {
         private LocalDate date;
         private Category category;
 
-        public FixedDto.Put addFixed(Long fixedId) {
+        public FixedDto.Patch addFixedId(Long fixedId) {
             Assert.notNull(fixedId, "fixed id must not be null.");
             this.fixedId = fixedId;
             return this;

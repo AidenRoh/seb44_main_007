@@ -9,13 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-<<<<<<< HEAD
-    date = "2023-07-03T15:41:37+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
-=======
-    date = "2023-07-03T10:15:08+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 19.0.2 (Azul Systems, Inc.)"
->>>>>>> bc1d7723f8143bbd1743d73737085c650eb1cf9d
+    date = "2023-07-19T10:11:15+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
 public class FixedMapperImpl implements FixedMapper {
@@ -26,35 +21,36 @@ public class FixedMapperImpl implements FixedMapper {
             return null;
         }
 
-        Fixed fixed = new Fixed();
+        Fixed.FixedBuilder fixed = Fixed.builder();
 
-        fixed.setDate( requestBody.getDate() );
-        fixed.setFixedName( requestBody.getFixedName() );
-        fixed.setType( requestBody.getType() );
-        fixed.setAmount( requestBody.getAmount() );
-        fixed.setNote( requestBody.getNote() );
-        fixed.setCategory( requestBody.getCategory() );
+        fixed.fixedName( requestBody.getFixedName() );
+        fixed.type( requestBody.getType() );
+        fixed.amount( requestBody.getAmount() );
+        fixed.note( requestBody.getNote() );
+        fixed.date( requestBody.getDate() );
+        fixed.category( requestBody.getCategory() );
+        fixed.memberId( requestBody.getMemberId() );
 
-        return fixed;
+        return fixed.build();
     }
 
     @Override
-    public Fixed fixedPutDtoToFixed(FixedDto.Put requestBody) {
+    public Fixed fixedPutDtoToFixed(FixedDto.Patch requestBody) {
         if ( requestBody == null ) {
             return null;
         }
 
-        Fixed fixed = new Fixed();
+        Fixed.FixedBuilder fixed = Fixed.builder();
 
-        fixed.setDate( requestBody.getDate() );
-        fixed.setFixedId( requestBody.getFixedId() );
-        fixed.setFixedName( requestBody.getFixedName() );
-        fixed.setType( requestBody.getType() );
-        fixed.setAmount( requestBody.getAmount() );
-        fixed.setNote( requestBody.getNote() );
-        fixed.setCategory( requestBody.getCategory() );
+        fixed.fixedId( requestBody.getFixedId() );
+        fixed.fixedName( requestBody.getFixedName() );
+        fixed.type( requestBody.getType() );
+        fixed.amount( requestBody.getAmount() );
+        fixed.note( requestBody.getNote() );
+        fixed.date( requestBody.getDate() );
+        fixed.category( requestBody.getCategory() );
 
-        return fixed;
+        return fixed.build();
     }
 
     @Override
@@ -65,7 +61,9 @@ public class FixedMapperImpl implements FixedMapper {
 
         FixedDto.Response.ResponseBuilder response = FixedDto.Response.builder();
 
-        response.fixedId( fixed.getFixedId() );
+        if ( fixed.getFixedId() != null ) {
+            response.fixedId( fixed.getFixedId() );
+        }
         response.type( fixed.getType() );
         response.fixedName( fixed.getFixedName() );
         response.amount( fixed.getAmount() );

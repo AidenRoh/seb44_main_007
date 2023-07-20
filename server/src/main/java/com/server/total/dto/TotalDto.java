@@ -17,7 +17,7 @@ public class TotalDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public class Post {
+    public static class Post {
         private BigDecimal totalIncome;
         private BigDecimal totalOutcome;
         private BigDecimal goal;
@@ -26,13 +26,13 @@ public class TotalDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public class Put {
-        private long totalId;
+    public static class Patch {
+        private Long totalId;
         private BigDecimal totalIncome;
         private BigDecimal totalOutcome;
         private BigDecimal goal;
 
-        public TotalDto.Put addTotalId(Long totalId) {
+        public TotalDto.Patch addTotalId(Long totalId) {
             Assert.notNull(totalId, "total id must not be null.");
             this.totalId = totalId;
             return this;

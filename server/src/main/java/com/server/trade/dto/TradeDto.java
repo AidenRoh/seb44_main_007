@@ -1,6 +1,5 @@
 package com.server.trade.dto;
 
-import com.server.response.PageInfo;
 import com.server.trade.entity.Category;
 import com.server.trade.entity.Trade;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,7 @@ public class TradeDto {
     @NoArgsConstructor
     @Builder
     public static class Post {
+        private Long memberId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -28,6 +28,10 @@ public class TradeDto {
         private String note; //비고
         private LocalDate date;
         private Category category;
+
+        public void setMemberId(Long memberId) {
+            this.memberId = memberId;
+        }
 
     }
 
@@ -35,8 +39,8 @@ public class TradeDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Put {
-        private long tradeId;
+    public static class Patch {
+        private Long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         @NotNull
@@ -45,23 +49,12 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-        public TradeDto.Put addTradeId(Long tradeId) {
+        public TradeDto.Patch addTradeId(Long tradeId) {
             Assert.notNull(tradeId, "trade id must not be null.");
             this.tradeId = tradeId;
             return this;
         }
 
-    }
-
-
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class ResponseDto<T> {
-        private List<T> data;
-        private PageInfo pageInfo;
     }
 
 
@@ -73,13 +66,14 @@ public class TradeDto {
     @NoArgsConstructor
     @Builder
     public static class Response {
-        private long tradeId;
+        private Long tradeId;
         private String type; //수입 or 지출
         private String tradeName; //내역
         private BigDecimal amount; //금액
         private String note; //비고
         private LocalDate date;
         private Category category;
+        private Long memberId;
 
 
 
@@ -92,35 +86,11 @@ public class TradeDto {
                     .note(trade.getNote())
                     .date(trade.getDate())
                     .category(trade.getCategory())
+                    .memberId(trade.getMemberId())
                     .build();
         }
     }
 
-
-
-
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class TradeInfo {
-        private long tradeId;
-        private String type; //수입 or 지출
-        private String tradeName; //내역
-        private BigDecimal amount;
-        private String note; //비고
-        private LocalDate date;
-        private Category category;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class TotalInfo {
-        private BigDecimal totalIncome;
-        private BigDecimal totalOutcome;
-        private BigDecimal goal;
-    }
 
     @Getter
     @Builder
@@ -134,10 +104,6 @@ public class TradeDto {
         private LocalDate date;
         private Category category;
 
-
-        private BigDecimal totalIncome;
-        private BigDecimal totalOutcome;
-        private BigDecimal goal;
     }
 
     public static List<ListElement> getList(List<Trade> trades) {
@@ -150,9 +116,6 @@ public class TradeDto {
                         .note(trade.getNote())
                         .date(trade.getDate())
                         .category(trade.getCategory())
-                        .totalIncome(trade.getTotalIncome())
-                        .totalIncome(trade.getTotalOutcome())
-                        .goal(trade.getGoal())
                         .build()
                 )
                 .collect(Collectors.toList());

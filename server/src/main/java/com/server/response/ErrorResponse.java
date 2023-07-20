@@ -1,6 +1,6 @@
 package com.server.response;
 
-import com.server.exception.ExceptionCode;
+import com.server.advice.ExceptionCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

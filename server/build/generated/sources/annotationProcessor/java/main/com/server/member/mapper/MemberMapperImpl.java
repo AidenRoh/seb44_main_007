@@ -2,7 +2,6 @@ package com.server.member.mapper;
 
 import com.server.member.dto.MemberDto;
 import com.server.member.entity.Member;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -10,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-03T15:41:37+0900",
-    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11 (Oracle Corporation)"
+    date = "2023-07-19T14:50:20+0900",
+    comments = "version: 1.5.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-8.1.1.jar, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
 public class MemberMapperImpl implements MemberMapper {
@@ -22,29 +21,34 @@ public class MemberMapperImpl implements MemberMapper {
             return null;
         }
 
-        Member member = new Member();
+        Member.MemberBuilder member = Member.builder();
 
-        member.setEmail( requestBody.getEmail() );
-        member.setPassword( requestBody.getPassword() );
-        member.setName( requestBody.getName() );
-        member.setPhoneNumber( requestBody.getPhoneNumber() );
+        member.email( requestBody.getEmail() );
+        member.name( requestBody.getName() );
+        member.password( requestBody.getPassword() );
+        member.phone( requestBody.getPhone() );
+        member.imageURL( requestBody.getImageURL() );
+        member.address( requestBody.getAddress() );
 
-        return member;
+        return member.build();
     }
 
     @Override
-    public Member memberPutDtoToMember(MemberDto.Put requestBody) {
+    public Member memberPatchDtoToMember(MemberDto.Patch requestBody) {
         if ( requestBody == null ) {
             return null;
         }
 
-        Member member = new Member();
+        Member.MemberBuilder member = Member.builder();
 
-        member.setMemberId( requestBody.getMemberId() );
-        member.setName( requestBody.getName() );
-        member.setPhoneNumber( requestBody.getPhoneNumber() );
+        member.memberId( requestBody.getMemberId() );
+        member.name( requestBody.getName() );
+        member.password( requestBody.getPassword() );
+        member.phone( requestBody.getPhone() );
+        member.imageURL( requestBody.getImageURL() );
+        member.address( requestBody.getAddress() );
 
-        return member;
+        return member.build();
     }
 
     @Override
@@ -53,23 +57,17 @@ public class MemberMapperImpl implements MemberMapper {
             return null;
         }
 
-        long memberId = 0L;
-        String name = null;
-        String email = null;
-        Integer phoneNumber = null;
-        String createdAt = null;
+        MemberDto.Response.ResponseBuilder response = MemberDto.Response.builder();
 
-        memberId = member.getMemberId();
-        name = member.getName();
-        email = member.getEmail();
-        phoneNumber = member.getPhoneNumber();
-        if ( member.getCreatedAt() != null ) {
-            createdAt = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format( member.getCreatedAt() );
-        }
+        response.memberId( member.getMemberId() );
+        response.email( member.getEmail() );
+        response.name( member.getName() );
+        response.phone( member.getPhone() );
+        response.createdAt( member.getCreatedAt() );
+        response.address( member.getAddress() );
+        response.imageURL( member.getImageURL() );
 
-        MemberDto.Response response = new MemberDto.Response( memberId, name, email, phoneNumber, createdAt );
-
-        return response;
+        return response.build();
     }
 
     @Override

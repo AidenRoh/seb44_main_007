@@ -1,0 +1,27 @@
+2023-07-20 09:17:24.110  INFO 8552 --- [main] com.server.ServerApplication             : Starting ServerApplication using Java 11.0.18 on DESKTOP-NIKJHOF with PID 8552 (C:\Users\lisso\Documents\dev\0719\seb44_main_007\server\build\classes\java\main started by lisso in C:\Users\lisso\Documents\dev\0719\seb44_main_007\server)
+2023-07-20 09:17:24.124  INFO 8552 --- [main] com.server.ServerApplication             : No active profile set, falling back to 1 default profile: "default"
+2023-07-20 09:17:25.494  INFO 8552 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-07-20 09:17:25.499  INFO 8552 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-07-20 09:17:25.824  INFO 8552 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 312 ms. Found 5 JPA repository interfaces.
+2023-07-20 09:17:26.897  INFO 8552 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-07-20 09:17:26.911  INFO 8552 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-07-20 09:17:26.911  INFO 8552 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.76]
+2023-07-20 09:17:27.137  INFO 8552 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-07-20 09:17:27.137  INFO 8552 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2923 ms
+2023-07-20 09:17:27.405  INFO 8552 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-07-20 09:17:27.503  INFO 8552 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-07-20 09:17:27.776  INFO 8552 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-07-20 09:17:27.967  INFO 8552 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-07-20 09:17:28.393  INFO 8552 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-07-20 09:17:28.421  INFO 8552 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2023-07-20 09:17:29.434  INFO 8552 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-07-20 09:17:29.447  INFO 8552 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-07-20 09:17:30.727  INFO 8552 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3da12ba4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@64b0ec4a, org.springframework.security.web.context.SecurityContextPersistenceFilter@7f82a71f, org.springframework.security.web.header.HeaderWriterFilter@57fb6900, org.springframework.web.filter.CorsFilter@1b949de4, org.springframework.security.web.authentication.logout.LogoutFilter@2c56e044, com.server.auth.filter.JwtAuthenticationFilter@2981064d, com.server.auth.filter.JwtVerificationFilter@1dc9e4d2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@64821706, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3b0d9da, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7ef8899d, org.springframework.security.web.session.SessionManagementFilter@3f0751b0, org.springframework.security.web.access.ExceptionTranslationFilter@1f67d37f, org.springframework.security.web.access.intercept.AuthorizationFilter@98a0842]
+2023-07-20 09:17:30.802  WARN 8552 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-07-20 09:17:31.330  WARN 8552 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2023-07-20 09:17:31.621  INFO 8552 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-07-20 09:17:31.632  INFO 8552 --- [main] com.server.ServerApplication             : Started ServerApplication in 8.212 seconds (JVM running for 8.871)
+2023-07-20 09:27:21.735  INFO 8552 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-07-20 09:27:21.736  INFO 8552 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-07-20 09:27:21.739  INFO 8552 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-07-20 09:27:22.929  INFO 8552 --- [http-nio-8080-exec-3] c.s.a.H.UserAuthenticationSuccessHandler : # Authentication successfully.

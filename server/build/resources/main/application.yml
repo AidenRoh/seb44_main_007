@@ -1,11 +1,77 @@
 
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: 1111
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+      hibernate:
+        connection:
+          isolation: 1
+  datasource:
+    url: jdbc:mysql://localhost:3306/database1?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 935988023864-rrm6bo9u69r2abs63t92hbsu0ovoeku8.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+
+  redis:
+    host: localhost
+    port: 6379
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  key: asdfqwerasdfqwerasdfqwerasdfqwerasdfasdfasdfasdf
+  access-token-expiration-minutes: 1000
+  refresh-token-expiration-minutes: 2000
+
+
+logging:
+  file:
+    name: logs/logging.log
+  level:
+    spring:
+      root: DEBUG
+      com.server: DEBUG
+      server:
+        auth: DEBUG
+
+#logging:
+#  file:
+#    name: logs/logging.log
+#  level:
+#    root: DEBUG
+#    spring:
+#      root: DEBUG
+#      com:
+#        server:
+#          auth: DEBUG
+
+
+cors:
+  allowed-origins: "*"
+  allowed-methods: GET, POST, PATCH, DELETE, OPTIONS
+  allowed-headers: Authorization, Content-Type
+  allow-credentials: true

@@ -1,12 +1,17 @@
 package com.server.member.dto;
 
+import com.server.member.entity.Member;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class MemberDto {
@@ -17,33 +22,39 @@ public class MemberDto {
         @NotBlank
         @Email
         private String email;
-
+        @NotBlank
+        private String name;
         @NotBlank
         private String password;
-
-        @NotBlank(message = "이름은 공백이 아니어야합니다.")
-        private String name;
-
         @NotBlank
-        @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",
-                message = "휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다")
-        private Integer phoneNumber;
+        private String phone;
+
+        private LocalDate createdAt;
+
+        private String address;
+
+        private String imageURL;
+
 
     }
 
     @Getter
     @AllArgsConstructor
-    public static class Put {
+    public static class Patch {
 
-        private long memberId;
+        private Long memberId;
 
         private String name;
 
-        @Pattern(regexp = "^010-\\d{3,4}-\\d{4}$",
-                message = "휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다")
-        private Integer phoneNumber;
+        private String password;
 
-        public Put addMemberId(Long memberId){
+        private String phone;
+
+        private String address;
+
+        private String imageURL;
+
+        public Patch addMemberId(Long memberId) {
             Assert.notNull(memberId, "Member Id must not be Null");
             this.memberId = memberId;
             return this;
@@ -54,7 +65,7 @@ public class MemberDto {
     @AllArgsConstructor
     public static class PatchPassword {
 
-        private long memberId;
+        private Long memberId;
 
         @NotBlank
         private String currentPassword;
@@ -70,12 +81,30 @@ public class MemberDto {
     }
 
     @Getter
+    @Builder
+    @NoArgsConstructor
     @AllArgsConstructor
-    public static class Response{
-        private long memberId;
-        private String name;
+    public static class Response {
+        private Long memberId;
         private String email;
-        private Integer phoneNumber;
-        private String createdAt;
+        private String name;
+        private String phone;
+        private LocalDate createdAt;
+        private String address;
+        private String imageURL;
+
+
+
+        public static Response response(Member member) {
+            return Response.builder()
+                    .memberId(member.getMemberId())
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .phone(member.getPhone())
+                    .createdAt(member.getCreatedAt())
+                    .address(member.getAddress())
+                    .imageURL(member.getImageURL())
+                    .build();
+        }
     }
 }

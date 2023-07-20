@@ -1,15 +1,12 @@
 package com.server.trade.controller;
 
 import com.server.dto.ResponseDto;
+import com.server.member.repository.MemberRepository;
 import com.server.trade.dto.TradeDto;
 import com.server.trade.entity.Trade;
 import com.server.trade.mapper.TradeMapper;
 import com.server.trade.service.TradeService;
 import com.server.utils.UriCreator;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +19,14 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("trades")
+@RequestMapping("/trades")
 @Validated
+@CrossOrigin
 public class TradeController {
     private final static String TRADES_URL = "trades";
     private TradeService tradeService;
+    private MemberRepository memberRepository;
     private TradeMapper mapper;
 
     public TradeController(TradeService tradeService, TradeMapper mapper) {
@@ -36,63 +34,69 @@ public class TradeController {
         this.mapper = mapper;
     }
 
-    @PostMapping
-    public ResponseEntity postTrade(@Valid @RequestBody TradeDto.Post requestBody) {
-        Trade trade = tradeService.createTrade(mapper.tradePostDtoToTrade(requestBody));
-        URI location = UriCreator.createUri(TRADES_URL, trade.getTradeId());
-        return new ResponseEntity<>(TradeDto.Response.response(trade), HttpStatus.CREATED);
+
+//    @PostMapping //태양님과 고친 코드
+//    public ResponseEntity postTrade(@RequestHeader("Authorization") String tokenHeader, @Valid @RequestBody TradeDto.Post requestBody) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        Trade trade = tradeService.createTrade(token, mapper.tradePostDtoToTrade(requestBody));
+//        URI location = UriCreator.createUri(TRADES_URL, trade.getTradeId());
+//        return new ResponseEntity<>(TradeDto.Response.response(trade), HttpStatus.CREATED);
+//    }
+
+    @PostMapping("/{memberId}")
+    public ResponseEntity postTrade(@PathVariable("memberId") @Positive Long memberId,
+                                    @Valid @RequestBody TradeDto.Post requestBody) {
+
+        if (requestBody == null) {
+            throw new IllegalArgumentException("Request body cannot be null.");
+        }
+
+        requestBody.setMemberId(memberId); // memberId 설정
+        Trade trade = mapper.tradePostDtoToTrade(requestBody);
+        Trade createTrade = tradeService.createTrade(trade);
+        URI location = UriCreator.createUri(TRADES_URL, createTrade.getTradeId());
+        return new ResponseEntity<>(TradeDto.Response.response(createTrade), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/{tradeId}")
-    public ResponseEntity putTrade(@PathVariable("tradeId") @Positive long tradeId,
-                                   @Valid @RequestBody TradeDto.Put requestBody) {
-        Trade trade = tradeService.updateTrade(mapper.tradePutDtoToTrade(requestBody.addTradeId(tradeId)));
-        return new ResponseEntity(new ResponseDto.SingleResponseDto<>(mapper.tradeToResponseDto(trade)),
+
+
+
+    @PatchMapping("/{tradeId}/{memberId}")
+    public ResponseEntity patchTrade(@PathVariable("tradeId") @Positive Long tradeId,
+                                     @PathVariable("memberId") @Positive Long memberId,
+                                     @Valid @RequestBody TradeDto.Patch requestBody) {
+
+        Trade trade = tradeService.updateTrade(mapper.tradePatchDtoToTrade(requestBody.addTradeId(tradeId)), memberId);
+
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(
+                mapper.tradeToResponseDto(trade)), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{tradeId}")
+    public ResponseEntity getTrade(@PathVariable("tradeId") @Positive Long tradeId) {
+        Trade trade = tradeService.findTrade(tradeId);
+        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(mapper.tradeToResponseDto(trade)),
                 HttpStatus.OK);
     }
 
-    @GetMapping("/{tradeId}")
-    public ResponseEntity getTrade(@PathVariable("tradeId") @Positive long tradeId) {
-        Trade trade = tradeService.findTrade(tradeId);
-        return new ResponseEntity<>(new ResponseDto.SingleResponseDto<>(TradeDto.Response.response(trade)), HttpStatus.OK);
-    }
 
 
-    @GetMapping //localhost:8080/trades?size=10&page=1&startDate=2023-07-01&endDate=2023-07-07
-    public ResponseEntity<?> getTradesByDate(@Positive @RequestParam(defaultValue = "1") int page,
-                                             @Positive @RequestParam(defaultValue = "10") int size,
-                                             @RequestParam(defaultValue = "days") String tab,
-                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    @GetMapping
+    public ResponseEntity getTrades(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
-        Pageable pageable;
-        Page<Trade> tradePage;
+        List<Trade> trades = tradeService.findTrades(startDate, endDate);
 
-        if (tab.equals("days")) {
-            pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "date"));
+        if (trades.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            throw new IllegalArgumentException("Invalid sort parameter");
+            return new ResponseEntity<>(trades, HttpStatus.OK);
         }
-
-        tradePage = tradeService.findTradesByDateRange(startDate, endDate, pageable);
-        List<Trade> trades = tradePage.getContent();
-        List<TradeDto.ListElement> tradeInfoList = TradeDto.getList(trades);
-
-
-        return new ResponseEntity<>(new ResponseDto.MultiResponseDto<>(tradeInfoList, tradePage), HttpStatus.OK);
     }
 
-
-
-//    @GetMapping //그냥응답
-//    public ResponseEntity getTrades(@Positive @RequestParam int page,
-//                                  @Positive @RequestParam(defaultValue = "6") int size) {
-//        Page<Trade> pageInfo = tradeService.findTrades(page -1, size);
-//        List<Trade> trades = pageInfo.getContent();
-//        List<TradeDto.ListElement> tradeInfoList = TradeDto.getList(trades);
-//        return new ResponseEntity<>(new MultiResponseDto<>(tradeInfoList, pageInfo), HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{tradeId}")
     public ResponseEntity deleteTag(@PathVariable("tradeId") @Positive Long tradeId) {
